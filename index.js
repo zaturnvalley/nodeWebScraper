@@ -1,6 +1,7 @@
 // Web scraping in Node
+const request = require('request');
 const rp = require('request-promise');
-const cherio = require('cheerio');
+const cherio = require('cherio');
 const Table = require('cli-table');
 
 let users = [];
