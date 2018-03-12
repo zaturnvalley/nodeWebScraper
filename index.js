@@ -4,6 +4,10 @@ const cherio = require('cheerio');
 const Table = require('cli-table');
 
 let users = [];
+let table = new Table({
+  head: ['username', '❤️', 'challenges'],
+  colWidths: [15, 5, 10]
+});
 
 const options = {
   url: `https://forum.freecodecamp.org/directory_items?period=weekly&order=likes_received&_=1520892991855`,
@@ -38,8 +42,19 @@ rp(options)
             process.stdout.write(`.`);
 
             const fccAccount = $('h1.landing-heading').length == 0;
-            const challengesPassed = fccAccount ? $('tbody tr').length : 'unknown'
+            const challengesPassed = fccAccount ? $('tbody tr').length : 'unknown';
+            table.push([userData[i].name, userData[i].likes_received], challengesPassed);
+            i++;
+            return next();
           })
+      } else {
+        printData();
       }
     }
-  }
+    return next;
+  };
+
+function printData() {
+  console.log("✅");
+  console.log(table.toString());
+}
