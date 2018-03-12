@@ -17,5 +17,9 @@ rp(options)
     for (let user of data.directory_items) {
       userData.push({name: user.user.username,likes_received: user.likes_received});
     }
-
+    process.stdout.write('loading');
+    getChallengesCompletedAndPushToUserArray(userData);
   })
+  .catch((err) => {
+    console.log(err);
+  });
