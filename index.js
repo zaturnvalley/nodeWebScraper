@@ -17,9 +17,29 @@ rp(options)
     for (let user of data.directory_items) {
       userData.push({name: user.user.username,likes_received: user.likes_received});
     }
+
     process.stdout.write('loading');
     getChallengesCompletedAndPushToUserArray(userData);
   })
   .catch((err) => {
     console.log(err);
   });
+
+  function getChallengesCompletedAndPushToUserArray(userData) {
+    var i = 0;
+    function next() {
+      if (i < userData.length) {
+        var options = {
+          url: `https://freecodecamp.org/` + userData[i].name,
+          transform: body => cherio.load(body)
+        }
+        rp(options)
+          .then(function ($) {
+            process.stdout.write(`.`);
+
+            const fccAccount = $('h1.landing-heading').length == 0;
+            const challengesPassed = fccAccount ? $('tbody tr').length : 'unknown'
+          })
+      }
+    }
+  }
