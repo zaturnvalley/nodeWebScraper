@@ -1,7 +1,7 @@
 // Web scraping in Node
 const request = require('request');
 const rp = require('request-promise');
-const cherio = require('cherio');
+const cheerio = require('cheerio');
 const Table = require('cli-table');
 
 let users = [];
@@ -18,9 +18,9 @@ const options = {
 rp(options)
   .then((data) => {
     let userData = [];
-
-    for (let user of data.directory_items) {
-      userData.push({name: user.user.username,likes_received: user.likes_received});
+    const dataList = data.directory_items;
+    for (let i = 0; i < dataList.length; i++) {
+      userData.push({name: dataList[i].user.username, likes_received: dataList[i].likes_received});
     }
 
     process.stdout.write('loading');
@@ -36,7 +36,7 @@ rp(options)
       if (i < userData.length) {
         var options = {
           url: `https://freecodecamp.org/` + userData[i].name,
-          transform: body => cherio.load(body)
+          transform: body => cheerio.load(body)
         }
         rp(options)
           .then(function ($) {
@@ -44,7 +44,7 @@ rp(options)
 
             const fccAccount = $('h1.landing-heading').length == 0;
             const challengesPassed = fccAccount ? $('tbody tr').length : 'unknown';
-            table.push([userData[i].name, userData[i].likes_received], challengesPassed);
+            table.push([userData[i].name, userData[i].likes_received, challengesPassed]);
             i++;
             return next();
           })
@@ -52,7 +52,7 @@ rp(options)
         printData();
       }
     }
-    return next;
+    return next();
   };
 
 function printData() {

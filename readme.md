@@ -1,8 +1,10 @@
 # Basic Web Scraping with NodeJS
+* Note: Example works with specific site on freecodecamp, but URL can be subbed out. This was a lesson privided by that platform, code along.
 
 ## Uses:
+* request
 * request-promise
-* cherio
+* cheerio
 * cli-table
 
 ## Getting started:
